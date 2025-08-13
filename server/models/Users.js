@@ -7,7 +7,23 @@ module.exports=(sequelize,DataType) =>{
         password:{
             type:DataType.STRING,
             allowNull:false,
+        },
+        email:{
+            type:DataType.STRING,
+            allowNull:false,    
+        },
+        bornDate:{
+            type:DataType.DATEONLY,
+        },
+        firstName:{
+            type:DataType.STRING,
+            allowNull:false,
+        },
+        lastName:{
+            type:DataType.STRING,
+            allowNull:false,
         }
+        
     })
 
     return Users

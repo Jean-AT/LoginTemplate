@@ -7,7 +7,7 @@ const port = 3000;
 app.use(express.json());
 app.use(cors());
 const usersRouter = require("./routers/Users")
-app.use('/login',usersRouter);
+app.use('/auth',usersRouter);
 
 db.sequelize.authenticate()
     .then(() =>{
