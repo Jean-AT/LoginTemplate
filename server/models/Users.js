@@ -22,6 +22,10 @@ module.exports=(sequelize,DataTypes) =>{
         lastName:{
             type:DataTypes.STRING,
             allowNull:false,
+        },
+        rol:{
+            type:DataTypes.STRING,
+            allowNull:false
         }
         
     })
