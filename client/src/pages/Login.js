@@ -12,9 +12,12 @@ export default function Login(){
     });
     const OnSubmit= async(data)=>{
         try{
-            await axios.post("http://localhost:3000/auth/login",data).then(()=>{
-                console.log(data);
-                navigate("/");
+            await axios.post("http://localhost:3000/auth/login",data).then((response)=>{
+            if (response.data.error) {
+                alert(response.data.error);
+            } else {
+                sessionStorage.setItem("accessToken", response.data);
+            }
             });
         }catch (err){
             console.log(err);
@@ -31,7 +34,6 @@ export default function Login(){
 
     return(
         <dev>
-            <label>Ola</label>
             <form onSubmit={handleSubmit(OnSubmit)}>
                 <input 
                 {...register("username")}
