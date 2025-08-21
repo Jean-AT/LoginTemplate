@@ -11,7 +11,7 @@ router.delete('/deleteAcount/:id',deleteAcount)//sirve
 
 router.put('/ChangeData/:id',ChangeData)//sirve
 
-router.get('//Dashboard/:id',authMiddleware,dashBoard)//sirve
+router.get('/dashBoard',authMiddleware,dashBoard)//Test the middleware
 
 router.get('/getAllUsers',getAllUsers)//sirve
 

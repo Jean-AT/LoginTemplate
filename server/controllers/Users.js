@@ -11,7 +11,7 @@ const login = async(req,res)=>{
         bcryp.compare(password,user.password).then((match)=>{
             if(!match) {return res.status(400).json({error:"Not match betwen the password and username"})}
             const accesToken = sign(
-                {username:user.username,id:user.id},
+                {id:user.id,username:user.username},
                 process.env.JWT_SECRET,{
                     expiresIn:'1d'
                 }
@@ -74,14 +74,12 @@ const ChangeData = async(req,res)=>{
 
 const dashBoard = async(req,res)=>{
     try{
-        const id = req.params.id;
-        const user = await Users.findOne({where:{id:id}})
-        if(user.rol == "Admin"){
-            //The user cant enter the dashboard page
-            res.json("Eres admin")
-        }else{
-            res.status(800).json({error:"NO ES ADMIn"})
-        }
+        const luckyNumber = Math.floor(Math.random() * 100);
+
+        res.status(200).json({
+            msg: `Hello, ${req.user.username}`,
+            secret: `Here is your authorized data, your lucky number is ${luckyNumber}`,
+        });
     }catch{}
 }
 

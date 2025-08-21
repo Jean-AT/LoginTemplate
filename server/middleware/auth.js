@@ -11,8 +11,8 @@ const authenticationMiddleware = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    const { id, name } = decoded
-    req.user = { id, name }
+    const { id, username } = decoded
+    req.user = { id, username }
     next()
   } catch (error) {
     return res.status(401).json({msg: "Unauthorized. Please add valid token"});
