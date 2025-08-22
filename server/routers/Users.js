@@ -1,18 +1,18 @@
 const express = require('express')
 const router = express.Router();
 const { login,ChangeData,registration,deleteAcount,dashBoard,getAllUsers } = require('../controllers/Users');
-const authMiddleware = require('../middleware/auth')
+const {authenticationMiddleware,verifyAdmin} = require('../middleware/auth')
 
-router.post('/login',login)//sirve
+router.post('/login',login)
 
-router.post('/registration',registration)//sirve
+router.post('/registration',registration)
 
-router.delete('/deleteAcount/:id',deleteAcount)//sirve
+router.delete('/deleteAcount/:id',deleteAcount)
 
-router.put('/ChangeData/:id',ChangeData)//sirve
+router.put('/ChangeData/:id',ChangeData)
 
-router.get('/dashBoard',authMiddleware,dashBoard)//Test the middleware
+router.get('/dashBoard',authenticationMiddleware,dashBoard)
 
-router.get('/getAllUsers',getAllUsers)//sirve
+router.get('/getAllUsers',authenticationMiddleware,verifyAdmin,getAllUsers)
 
 module.exports = router;

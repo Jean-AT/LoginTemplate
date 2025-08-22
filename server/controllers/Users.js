@@ -11,9 +11,9 @@ const login = async(req,res)=>{
         bcryp.compare(password,user.password).then((match)=>{
             if(!match) {return res.status(400).json({error:"Not match betwen the password and username"})}
             const accesToken = sign(
-                {id:user.id,username:user.username},
+                {id:user.id,username:user.username,rol:user.rol},
                 process.env.JWT_SECRET,{
-                    expiresIn:'1d'
+                    expiresIn:'10h'
                 }
             )
             return res.json(accesToken);
@@ -84,9 +84,9 @@ const dashBoard = async(req,res)=>{
 }
 
 const getAllUsers = async(req,res)=>{
-  let users = await Users.findAll({});
-
-  return res.status(200).json({ users });
+    
+    let users = await Users.findAll({});
+    return res.status(200).json({ users });
 }
 
 module.exports = {

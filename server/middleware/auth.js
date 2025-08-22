@@ -11,12 +11,23 @@ const authenticationMiddleware = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    const { id, username } = decoded
-    req.user = { id, username }
+    const { id, username, rol } = decoded;
+    req.user = { id, username, rol };
     next()
   } catch (error) {
     return res.status(401).json({msg: "Unauthorized. Please add valid token"});
   }
 }
 
-module.exports = authenticationMiddleware
+const verifyAdmin = (req, res, next) => {
+  if (req.user.rol !== "Admin") {
+    return res.status(403).json({ message: "Acceso denegado, no eres admin" });
+  }
+  next();
+};
+
+
+module.exports = {
+  authenticationMiddleware,
+  verifyAdmin
+}
