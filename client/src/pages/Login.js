@@ -12,13 +12,19 @@ export default function Login(){
     });
     const OnSubmit= async(data)=>{
         try{
-            await axios.post("http://localhost:3000/auth/login",data).then((response)=>{
+            await axios.post("http://localhost:3000/auth/login", data, {
+            withCredentials: true
+            })
+            .then((response) => {
             if (response.data.error) {
                 alert(response.data.error);
             } else {
-                sessionStorage.setItem("accessToken", response.data);
+                alert("Login exitoso");
+                navigate('/')
+                // NO guardas nada en sessionStorage
             }
             });
+
         }catch (err){
             console.log(err);
         }

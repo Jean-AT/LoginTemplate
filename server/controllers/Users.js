@@ -16,7 +16,13 @@ const login = async(req,res)=>{
                     expiresIn:'10h'
                 }
             )
-            return res.json(accesToken);
+            res.cookie("token", accesToken, {
+            httpOnly: true,      // no accesible desde JS
+            sameSite: "strict",  // protege contra CSRF
+            maxAge: 24 * 60 * 60 * 1000 // expira en 1 día
+            });
+            res.json({ message: "Login exitoso" });
+
         })
     }catch(err){
         return res.status(500).json({error:err.message})

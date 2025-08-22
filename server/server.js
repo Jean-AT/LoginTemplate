@@ -4,9 +4,16 @@ const db = require('./models')
 const cors = require('cors')
 const env = require('./config/env')
 const port = env.app.port;
+const cookieParser = require("cookie-parser");
 
 app.use(express.json());
-app.use(cors());
+
+app.use(cors({
+  origin: "http://localhost:3001", // tu frontend
+  credentials: true                // permite cookies
+}));
+
+app.use(cookieParser());
 const usersRouter = require("./routers/Users")
 app.use('/auth',usersRouter);
 
