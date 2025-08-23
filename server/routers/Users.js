@@ -7,9 +7,9 @@ router.post('/login',login)
 
 router.post('/registration',registration)
 
-router.delete('/deleteAcount/:id',deleteAcount)
+router.delete('/deleteAcount',authenticationMiddleware,deleteAcount)
 
-router.put('/ChangeData/:id',ChangeData)
+router.put('/ChangeData',authenticationMiddleware,ChangeData)
 
 router.get('/dashBoard',authenticationMiddleware,dashBoard)
 

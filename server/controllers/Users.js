@@ -1,6 +1,7 @@
 const {Users} = require("../models");
 const {sign} = require('jsonwebtoken');
-const bcryp = require("bcrypt")
+const bcryp = require("bcrypt");
+const {Op} = require("sequelize")
 
 
 const login = async(req,res)=>{
@@ -32,6 +33,17 @@ const login = async(req,res)=>{
 const registration = async(req,res)=>{
     try{
         const {firstName,lastName,email,bornDate,username,password,rol}=req.body;
+        const existingUser = await Users.findOne({
+            where: {
+                [Op.or]: [
+                { username },
+                { email }
+                ]
+            }
+        });
+        if (existingUser) {
+            return res.status(400).json({ error: "Username or email already exists" });
+        }
         bcryp.hash(password,10).then((hash)=>{
             Users.create({
                 username:username,
@@ -51,7 +63,7 @@ const registration = async(req,res)=>{
 
 const deleteAcount = async(req,res)=>{
     try{
-        const id = req.params.id;
+        const id = req.user.id;
         const deleted = await Users.destroy({where: {id : id}})
         if (deleted) {
         return res.json({ message: `Usuario con id ${id} eliminado` });
@@ -63,14 +75,16 @@ const deleteAcount = async(req,res)=>{
 
 const ChangeData = async(req,res)=>{
     try{
-        const id = req.params.id;
+        const id = req.user.id;
         const {username,password,email} = req.body;
         const user = await Users.findOne({where :{id:id}})
         if(user){
-            user.username = username
-            user.email = email
-            user.password = password
-            await user.save();
+            await bcryp.hash(password,10).then((hash)=>{
+                user.username = username,
+                user.email = email,
+                user.password = hash,
+                user.save()   
+            });
             res.json("Usuario Guardado")
         }
     }catch(err){ 

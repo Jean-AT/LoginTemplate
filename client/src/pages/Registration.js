@@ -14,16 +14,18 @@ export default function Login(){
         firstName:Yup.string().min(3).max(10),
         lastName:Yup.string()
     });
-    const OnSubmit= async(data)=>{
-        try{
-            await axios.post("http://localhost:3000/auth/registration",data).then(()=>{
-                console.log(data);
-                navigate("/");
+    const OnSubmit = async (data) => {
+        try {
+            const res = await axios.post("http://localhost:3000/auth/registration", data, {
+            withCredentials: true // si usas cookies
             });
-        }catch (err){
-            console.log(err);
+            console.log("Registro exitoso:", res.data);
+            navigate("/login");
+        } catch (err) {
+            console.error("Error al registrar:", err.response?.data || err.message);
         }
     };
+
     const {register,handleSubmit, formState:{errors}}=useForm({
         defaultValues:{
             username:"",
