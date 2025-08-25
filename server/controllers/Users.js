@@ -66,7 +66,12 @@ const deleteAcount = async(req,res)=>{
         const id = req.user.id;
         const deleted = await Users.destroy({where: {id : id}})
         if (deleted) {
-        return res.json({ message: `Usuario con id ${id} eliminado` });
+            res.clearCookie("token", {
+            httpOnly: true,
+            sameSite: "lax",
+            secure: false, // en prod: true
+            });
+            return res.json({ message: `Usuario con id ${id} eliminado` });
     }
     }catch (err) {
     return res.status(500).json({ error: err.message });
