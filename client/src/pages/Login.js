@@ -39,7 +39,7 @@ export default function Login(){
     
 
     return(
-        <dev>
+        <div>
             <form onSubmit={handleSubmit(OnSubmit)}>
                 <input 
                 {...register("username")}
@@ -56,6 +56,6 @@ export default function Login(){
                 {errors.username && <p>{errors.username.message}</p>}
                 <button type="submit">Registration</button>
             </form>
-        </dev>
+        </div>
     );
 }

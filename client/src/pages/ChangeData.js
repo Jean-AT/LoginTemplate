@@ -15,7 +15,7 @@ export default function ChangeData() {
 
   const OnSubmit = async (data) => {
     try {
-      const res = await axios.post("http://localhost:3000/auth/changeData", data, {
+      const res = await axios.put("http://localhost:3000/auth/changeData", data, {
         withCredentials: true, // cookies
       });
       console.log("Cambio de Datos Exitoso", res.data);
