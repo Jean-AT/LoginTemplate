@@ -6,8 +6,8 @@ body{
   color: white;
 }
 .navbar {
-  display: flex;
-  justify-content: space-around;
+  display:flex;
+  justify-content: right;
   background-color: #20232a;
   padding: 10px;
   border-radius: 10px;
@@ -17,6 +17,7 @@ body{
 .navbar a {
   text-decoration: none;
   color: white;
+  padding-left: 5%;
 }
 .navbar a:hover {
   color: antiquewhite;

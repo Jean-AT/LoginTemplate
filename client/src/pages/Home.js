@@ -11,14 +11,10 @@ export default function Home() {
           <div className='navbar'>
             <Link to="/Login"> Login</Link>
             <Link to="/Registration"> Registration</Link>
-            <Link to="/Delete"> Delete Acount</Link>
-            <Link to="/ChangeData"> Change Data</Link>
             <Link to="/"> Home</Link>
           </div>
         <Routes>
           <Route path="/Login" element={<Login/>} />
-          <Route path="/ChangeData" element={<ChangeData/>} />
-          <Route path="/Delete" element={<DeleteAcount/>} />
           <Route path="/Registration" element={<Registration/>} />
         </Routes>
       </Router>

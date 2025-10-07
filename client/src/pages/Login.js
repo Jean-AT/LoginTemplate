@@ -20,7 +20,7 @@ export default function Login(){
                 alert(response.data.error);
             } else {
                 alert("Login exitoso");
-                navigate('/')
+                navigate('/DashBoard')
                 // NO guardas nada en sessionStorage
             }
             });
