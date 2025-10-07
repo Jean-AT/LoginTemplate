@@ -1,0 +1,299 @@
+openapi: 3.0.4
+info:
+  title: Login API
+  description: |-
+    🚀 **Proyecto backend desarrollado en JavaScript y ejecutado con Node.js.**  
+    Este sistema fue diseñado como una **API REST de práctica** para comprender el uso de **JSON Web Tokens (JWT)**  
+    en la **autenticación, autorización y protección de rutas privadas**.  
+
+    Implementa un sistema completo de **login**, **registro**, **gestión de usuarios** y **rutas protegidas**,  
+    incluyendo un **dashboard** dinámico accesible solo con un token válido.  
+
+    Los datos de los usuarios se almacenan en una **base de datos MySQL**,  
+    asegurando integridad y persistencia en las operaciones CRUD.  
+
+    Este proyecto tiene fines **educativos y demostrativos**, mostrando una arquitectura limpia, modular  
+    y segura para aplicaciones Node.js modernas basadas en JWT.
+  contact:
+    email: jeanpoolariass2017@gmail.com
+  version: 1.0.12
+
+servers:
+  - url: http://localhost:3000/auth
+    description: Servidor local (backend)
+
+tags:
+  - name: user
+    description: Operaciones relacionadas con usuarios (registro, login, perfil, dashboard, administración)
+
+paths:
+  /registration:
+    post:
+      tags:
+        - user
+      summary: Registrar nuevo usuario
+      description: Crea un nuevo usuario en la base de datos.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationRequest'
+      responses:
+        '201':
+          description: Usuario creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /login:
+    post:
+      tags:
+        - user
+      summary: Iniciar sesión (obtener token JWT)
+      description: Valida credenciales y devuelve un token JWT para usar en rutas protegidas.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login exitoso — devuelve token JWT
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /deleteAcount:
+    delete:
+      tags:
+        - user
+      summary: Eliminar cuenta del usuario autenticado
+      description: Elimina la cuenta asociada al token. Protegido por `authenticationMiddleware`.
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Cuenta eliminada correctamente (sin contenido)
+        '401':
+          description: No autorizado / token inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Operación no permitida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /ChangeData:
+    put:
+      tags:
+        - user
+      summary: Actualizar datos del usuario autenticado
+      description: Actualiza campos del perfil del usuario autenticado. Protegido por `authenticationMiddleware`.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeDataRequest'
+      responses:
+        '200':
+          description: Usuario actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /dashBoard:
+    get:
+      tags:
+        - user
+      summary: Dashboard del usuario autenticado
+      description: Devuelve información personalizada para el usuario; accesible solo con un token válido.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Datos del dashboard
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardResponse'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /getAllUsers:
+    get:
+      tags:
+        - user
+      summary: Obtener lista de todos los usuarios (requiere rol admin)
+      description: Endpoint protegido por `authenticationMiddleware` y `verifyAdmin`. Retorna todos los usuarios registrados.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Requiere privilegios de administrador
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    RegistrationRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+          example: "Juan Pérez"
+        email:
+          type: string
+          format: email
+          example: "juan@example.com"
+        password:
+          type: string
+          format: password
+          example: "P@ssw0rd123"
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "juan@example.com"
+        password:
+          type: string
+          format: password
+          example: "P@ssw0rd123"
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token JWT (usar en Authorization: Bearer &lt;token&gt;)
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Juan Pérez"
+        email:
+          type: string
+          format: email
+          example: "juan@example.com"
+        role:
+          type: string
+          description: Rol del usuario (ej. user | admin)
+          example: "user"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2025-10-07T12:34:56Z"
+
+    ChangeDataRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Juanito"
+        email:
+          type: string
+          format: email
+          example: "nuevo@example.com"
+        password:
+          type: string
+          format: password
+          example: "Nuev0P@ss"
+
+    DashboardResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Bienvenido al dashboard"
+        user:
+          $ref: '#/components/schemas/User'
+        stats:
+          type: object
+          additionalProperties: true
+          example:
+            lastLogin: "2025-10-07T12:34:56Z"
+            actions: 12
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Descripción del error"

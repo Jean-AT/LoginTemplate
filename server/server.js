@@ -5,9 +5,14 @@ const cors = require('cors')
 const env = require('./config/env')
 const port = env.app.port;
 const cookieParser = require("cookie-parser");
-
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
 app.use(express.json());
+// Cargar el archivo YAML
+const swaggerDocument = YAML.load('./openapi.yaml');
 
+// Montar Swagger en /api-docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cors({
   origin: "http://localhost:3001", // tu frontend
   credentials: true                // permite cookies
