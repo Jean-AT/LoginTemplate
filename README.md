@@ -39,6 +39,12 @@ The goal of this project is to strengthen my understanding of secure backend dev
   <img width="1281" height="730" alt="image" src="https://github.com/user-attachments/assets/68ceb1fc-8924-4303-adfc-6ad358590cbc" />
 </p>
 
+## 📸 SwaggerUI
+
+<p align="center">
+  <img width="1736" height="980" alt="image" src="https://github.com/user-attachments/assets/ce3220ac-ed6b-4023-8620-b6be1bc47568" />
+</p>
+
 ---
 
 ## 🧠 My Skills
